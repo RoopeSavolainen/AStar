@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsItem
 from PyQt5.QtCore import Qt, pyqtSlot, QTimer, QPointF, QRectF
-from PyQt5.QtGui import QBrush, QTransform, QWindow, QPainter
+from PyQt5.QtGui import QBrush, QTransform, QWindow, QPainter, QFont
 
 from grid import Grid
 
@@ -52,16 +52,23 @@ class AStarApplication(QWidget):
 
     # Called when a tile changes type, so old 
     def update_tiles(self, caller):
-        if caller.type == 'clear' or caller.type == 'wall':
-            return
         for t in self.tiles:
-            if t != caller and t.type == caller.type:
+            if self.grid.target is not None:
+                t.subtext = t.node.heuristic(self.grid.target)
+            if t != caller and t.type != 'clear' and t.type != 'wall' and t.type == caller.type:
                 t.set_type('clear')
 
 
 # A QGraphicsItem that wraps a Node and is drawn as a tile
 class Tile(QGraphicsItem):
+
+    # Tile width/height in pixels
     size = 48
+
+    font_size = 12
+    font = QFont('',12)
+
+    # Different colors used in drawing the tile
     _colors = {'clear' : Qt.white, 'wall' : Qt.darkGray, 'start' : Qt.cyan, 'target' : Qt.yellow, 'checked' : Qt.red}
     
     def __init__(self, node, app):
@@ -73,6 +80,7 @@ class Tile(QGraphicsItem):
         self.type = 'clear'
         self._color = self._colors[self.type]
 
+        # Reference to the containing window, so we can call its update_tiles()
         self.app = app
 
         self.mousePressEvent = self.clicked
@@ -85,10 +93,14 @@ class Tile(QGraphicsItem):
 
     def paint(self, painter, options, widget):
         painter.setBrush(self._color)
+        painter.setPen(Qt.black)
+        painter.setFont(self.font)
+
         if self.node.checked and self.type == 'clear':
             painter.setBrush(self._colors['checked'])
         painter.setRenderHint(QPainter.Antialiasing)
         painter.drawRect(self.node.x*self.size, self.node.y*self.size, self.size, self.size)
+        painter.drawText(self.node.x*self.size+2, self.node.y*self.size+14, str(self.subtext))
 
 
     def boundingRect(self):
@@ -105,9 +117,11 @@ class Tile(QGraphicsItem):
         elif e.button() == Qt.RightButton:
             self.node.enabled = True
             new_type = 'start'
+            self.app.grid.start = self.node
         elif e.button() == Qt.MidButton:
             self.node.enabled = True
             new_type = 'target'
+            self.app.grid.target = self.node
         if new_type is not None:
             self.set_type(new_type)
 

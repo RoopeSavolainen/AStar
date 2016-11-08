@@ -1,3 +1,5 @@
+from math import sqrt
+
 class Grid:
     def __init__(self, w, h):
         self._nodes = []
@@ -14,7 +16,7 @@ class Grid:
                 row.append(Node(x,y))
             self._nodes.append(row)
         
-        # Creates edges between edges
+        # Creates edges between nodes
         for y in range(h-1,-1,-1):
             for x in range(w-1,-1,-1):
                 if x > 0:
@@ -78,7 +80,7 @@ class Node:
     # Heuristics function used in A* (just a distance between the two nodes
     # Takes another node as a parameter
     def heuristic(self, other):
-        dist = Math.sqrt((self.x-other.y)**2 + (self.y-other.y)**2)
+        dist = sqrt((self.x-other.x)**2 + (self.y-other.y)**2)
         return int(dist)
 
 

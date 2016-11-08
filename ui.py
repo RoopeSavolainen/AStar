@@ -4,6 +4,7 @@ from PyQt5.QtCore import Qt, pyqtSlot, QTimer, QPointF, QRectF
 from PyQt5.QtGui import QBrush, QTransform, QWindow, QPainter, QFont
 
 from grid import Grid
+from astar import AStar
 
 # The window that's launched with the application
 class AStarApplication(QWidget):
@@ -38,6 +39,10 @@ class AStarApplication(QWidget):
         self.refresh_timer.timeout.connect(self.refresh)
         self.refresh_timer.start()
 
+        self.AStar = AStar(self.grid)
+        self.focusPolicy = Qt.StrongFocus
+        self.keyPressEvent = self.kbdHandler
+
 
     # Avoid the segfault caused by some obscure GC stuff.
     @pyqtSlot()
@@ -49,6 +54,12 @@ class AStarApplication(QWidget):
     def refresh(self):
         self.scene.invalidate()
 
+    
+    @pyqtSlot()
+    def kbdHandler(self, e):
+        if e.key() == Qt.Key_Space:
+            self.AStar.step()            
+
 
     # Called when a tile changes type, so all tiles can be updated
     def update_tiles(self, caller):
@@ -59,6 +70,7 @@ class AStarApplication(QWidget):
                 t.subtext = ''
             if t != caller and t.type != 'clear' and t.type != 'wall' and t.type == caller.type:
                 t.set_type('clear')
+        self.AStar.reset()
 
 
 # A QGraphicsItem that wraps a Node and is drawn as a tile

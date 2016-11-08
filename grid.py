@@ -38,6 +38,14 @@ class Grid:
         if x > self.w - 1 or y > self.h - 1:
             return None
         return self._nodes[y][x]
+    
+    
+    def uncheck(self):
+        for x in range(self.w):
+            for y in range(self.h):
+                n = self.get_node(x,y)
+                n.checked = False
+                n.cost_so_far = None
 
 
 class Node:
@@ -48,6 +56,7 @@ class Node:
         self.enabled = True
 
         self.checked = False
+        self.cost_so_far = 0
 
 
     # Adds a new edge
@@ -71,7 +80,7 @@ class Node:
     # Returns a list of edges leading to non-disabled nodes
     def neighbours(self):
         l = []
-        for n in neighbours:
+        for n in self._neighbours:
             if n.target.enabled:
                 l.append(n)
         return l

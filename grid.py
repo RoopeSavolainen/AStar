@@ -15,7 +15,7 @@ class Grid:
             for x in range(w):
                 row.append(Node(x,y))
             self._nodes.append(row)
-        
+
         # Creates edges between nodes
         for y in range(h-1,-1,-1):
             for x in range(w-1,-1,-1):
@@ -38,8 +38,8 @@ class Grid:
         if x > self.w - 1 or y > self.h - 1:
             return None
         return self._nodes[y][x]
-    
-    
+
+
     def uncheck(self):
         for x in range(self.w):
             for y in range(self.h):
@@ -58,6 +58,8 @@ class Node:
         self.in_frontier = False
         self.checked = False
         self.cost_so_far = 0
+
+        prev_node = None
 
 
     # Adds a new edge

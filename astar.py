@@ -20,13 +20,14 @@ class AStar:
     def step(self):
         if len(self.frontier) == 0:
             return
-        current = min(self.frontier, key=lambda n: n.cost_so_far + n.heuristic(self.grid.target))
+        current = min(self.frontier, key=lambda n: n.cost_so_far + n.heuristic(self.grid.target)*10)
         self.frontier.remove(current)
         current.in_frontier = False
         for neighbour in current.neighbours():
             neighbour.target.checked = True
             neighbour.target.cost_so_far = current.cost_so_far + neighbour.length
             self.frontier.append(neighbour.target)
+            neighbour.target.prev_node = current
             neighbour.target.in_frontier = True
 
 

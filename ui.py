@@ -50,7 +50,7 @@ class AStarApplication(QWidget):
         self.scene.invalidate()
 
 
-    # Called when a tile changes type, so old 
+    # Called when a tile changes type, so all tiles can be updated
     def update_tiles(self, caller):
         for t in self.tiles:
             if self.grid.target is not None:
@@ -113,6 +113,10 @@ class Tile(QGraphicsItem):
     @pyqtSlot()
     def clicked(self, e):
         new_type = None
+        if self.type == 'target':
+            self.app.grid.target = None
+        if self.type == 'start':
+            self.app.grid.start = None
         if e.button() == Qt.LeftButton:
             self.node.enabled = not self.node.enabled
             new_type = 'clear' if self.node.enabled else 'wall'

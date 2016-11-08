@@ -55,6 +55,7 @@ class Node:
         self._neighbours = []
         self.enabled = True
 
+        self.in_frontier = False
         self.checked = False
         self.cost_so_far = 0
 
@@ -81,7 +82,7 @@ class Node:
     def neighbours(self):
         l = []
         for n in self._neighbours:
-            if n.target.enabled:
+            if n.target.enabled and not n.target.checked:
                 l.append(n)
         return l
 

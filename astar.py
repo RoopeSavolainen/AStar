@@ -34,10 +34,14 @@ class AStar:
         current.in_frontier = False
 
         for neighbour in current.neighbours():
-            neighbour.target.checked = True
-            neighbour.target.cost_so_far = current.cost_so_far + neighbour.length
-            self.frontier.append(neighbour.target)
-            neighbour.target.prev_node = current
-            neighbour.target.in_frontier = True
+            new_cost = current.cost_so_far + neighbour.length
+            if neighbour.target.cost_so_far is None or new_cost < neighbour.target.cost_so_far:
+                neighbour.target.cost_so_far = new_cost
+                neighbour.target.prev_node = current
+
+            if not neighbour.target.checked:
+                neighbour.target.checked = True
+                self.frontier.append(neighbour.target)
+                neighbour.target.in_frontier = True
 
 

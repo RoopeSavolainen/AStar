@@ -88,7 +88,7 @@ class Node:
     def neighbours(self):
         l = []
         for n in self._neighbours:
-            if n.target.enabled and not n.target.checked:
+            if n.target.enabled:
                 l.append(n)
         return l
 

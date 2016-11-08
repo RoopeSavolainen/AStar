@@ -45,6 +45,9 @@ class Grid:
             for y in range(self.h):
                 n = self.get_node(x,y)
                 n.checked = False
+                n.in_frontier = False
+                n.route = False
+                n.prev = None
                 n.cost_so_far = None
 
 
@@ -57,6 +60,7 @@ class Node:
 
         self.in_frontier = False
         self.checked = False
+        self.route = False
         self.cost_so_far = 0
 
         prev_node = None

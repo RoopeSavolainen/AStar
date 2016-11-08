@@ -83,7 +83,7 @@ class Tile(QGraphicsItem):
     font = QFont('',12)
 
     # Different colors used in drawing the tile
-    _colors = {'clear' : Qt.white, 'wall' : Qt.darkGray, 'start' : Qt.cyan, 'target' : Qt.yellow, 'checked' : Qt.green, 'frontier' : Qt.blue}
+    _colors = {'clear' : Qt.white, 'wall' : Qt.darkGray, 'start' : Qt.cyan, 'target' : Qt.yellow, 'checked' : Qt.green, 'frontier' : Qt.blue, 'route' : Qt.red}
     
     def __init__(self, node, app):
         super(Tile, self).__init__()
@@ -114,6 +114,9 @@ class Tile(QGraphicsItem):
             painter.setBrush(self._colors['checked'])
             if self.node.in_frontier:
                 painter.setBrush(self._colors['frontier'])
+        if self.node.route:
+            painter.setBrush(self._colors['route'])
+
         painter.setRenderHint(QPainter.Antialiasing)
         painter.drawRect(self.node.x*self.size, self.node.y*self.size, self.size, self.size)
         painter.drawText(self.node.x*self.size+2, self.node.y*self.size+14, str(self.subtext))

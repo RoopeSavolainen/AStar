@@ -41,7 +41,6 @@ class Node:
     def add_neighbour(self, other, length=1, bidirectional=False):
         edge = Edge(other, length)
         self.neighbours.append(edge)
-        print("Self: {0} {1} other: {2} {3}".format(self.x, self.y, other.x, other.y))
         if bidirectional:
             other.add_neighbour(self,length,False)
 

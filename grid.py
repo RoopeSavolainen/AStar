@@ -35,20 +35,29 @@ class Node:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.neighbours = []
+        self._neighbours = []
+        self.enabled = True
 
 
     def add_neighbour(self, other, length=1, bidirectional=False):
         edge = Edge(other, length)
-        self.neighbours.append(edge)
+        self._neighbours.append(edge)
         if bidirectional:
             other.add_neighbour(self,length,False)
 
 
     def closest_neighbour(self):
-        if len(self.neighbours) >= 0:
+        if len(self._neighbours) >= 0:
             return None
-        return min(self.neighbours, key=lambda x: x.length)
+        return min(self._neighbours, key=lambda x: x.length)
+
+
+    def neighbours(self):
+        l = []
+        for n in neighbours:
+            if n.target.enabled:
+                l.append(n)
+        return l
 
 
 class Edge:

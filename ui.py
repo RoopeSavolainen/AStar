@@ -8,6 +8,7 @@ from grid import Grid
 class AStarApplication(QWidget):
     def __init__(self):
         super(AStarApplication, self).__init__()
+        self.close = self.cleanup
 
         self.layout = QVBoxLayout(self)
         self.setLayout(self.layout)
@@ -15,7 +16,7 @@ class AStarApplication(QWidget):
         self.canvas = QGraphicsView()
         self.canvas.setViewportUpdateMode(QGraphicsView.FullViewportUpdate)
 
-        self.grid = Grid(24,16)
+        self.grid = Grid(24,20)
         self.tiles = []
         for x in range(self.grid.w):
             for y in range(self.grid.h):
@@ -31,9 +32,26 @@ class AStarApplication(QWidget):
         self.canvas.setScene(self.scene)
         self.layout.addWidget(self.canvas)
 
+        self.refresh_timer = QTimer()
+        self.refresh_timer.setInterval(1000/60)
+        self.refresh_timer.timeout.connect(self.refresh)
+        self.refresh_timer.start()
+
+
+    @pyqtSlot()
+    def cleanup(self, obj):
+        pass
+
+
+    @pyqtSlot()
+    def refresh(self):
+        self.scene.invalidate()
+
 
 class Tile(QGraphicsItem):
     size = 48
+    active_color = Qt.white
+    wall_color = Qt.darkGray
     
     def __init__(self, node):
         super(Tile, self).__init__()
@@ -41,15 +59,13 @@ class Tile(QGraphicsItem):
         self.node = node
         self.subtext = ''
 
-        self._color = Qt.white
+        self._color = self.active_color
+
+        self.mousePressEvent = self.toggle_wall
 
 
     def set_subtext(self, text):
         self.subtext = text
-
-
-    def _set_color(self, color):
-        self._color = color
 
 
     def paint(self, painter, options, widget):
@@ -60,3 +76,11 @@ class Tile(QGraphicsItem):
 
     def boundingRect(self):
         return QRectF(self.node.x*self.size, self.node.y*self.size, self.size, self.size)
+
+
+    @pyqtSlot()
+    def toggle_wall(self, e):
+        self.node.enabled = not self.node.enabled
+        self._color = self.active_color if self.node.enabled else self.wall_color
+
+

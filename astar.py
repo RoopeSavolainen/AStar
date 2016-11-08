@@ -21,10 +21,10 @@ class AStar:
     def step(self):
         if len(self.frontier) == 0:
             return
-        current = min(self.frontier, key=lambda n: n.cost_so_far + n.heuristic(self.grid.target)*10)
+        current = min(self.frontier, key=lambda n: n.cost_so_far + n.heuristic(self.grid.target))
 
         if current == self.grid.target:
-            route_node = current
+            route_node = current.prev_node
             while route_node != self.grid.start:
                 route_node.route = True
                 route_node = route_node.prev_node

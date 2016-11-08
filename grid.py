@@ -21,16 +21,16 @@ class Grid:
             for x in range(w-1,-1,-1):
                 if x > 0:
                     other = self.get_node(x-1, y)
-                    self.get_node(x, y).add_neighbour(other, 10, True)
+                    self.get_node(x, y).add_neighbour(other, 1, True)
                 if y > 0:
                     other = self.get_node(x, y-1)
-                    self.get_node(x, y).add_neighbour(other, 10, True)
+                    self.get_node(x, y).add_neighbour(other, 1, True)
                 if x > 0 and y > 0:
                     other = self.get_node(x-1, y-1)
-                    self.get_node(x, y).add_neighbour(other, 14, True)
+                    self.get_node(x, y).add_neighbour(other, 1.4, True)
                 if x > 0 and y < h-1:
                     other = self.get_node(x-1, y+1)
-                    self.get_node(x, y).add_neighbour(other, 14, True)
+                    self.get_node(x, y).add_neighbour(other, 1.4, True)
 
 
     # Gets the node with coordinates x, y
@@ -97,7 +97,7 @@ class Node:
     # Takes another node as a parameter
     def heuristic(self, other):
         dist = sqrt((self.x-other.x)**2 + (self.y-other.y)**2)
-        return int(dist)
+        return round(dist,1)
 
 
 # Edge is a simple unidirectional connection between two nodes

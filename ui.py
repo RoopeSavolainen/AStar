@@ -80,7 +80,8 @@ class Tile(QGraphicsItem):
     size = 48
 
     font_size = 12
-    font = QFont('',12)
+    sub_font = QFont('',12)
+    main_font = QFont('',14)
 
     # Different colors used in drawing the tile
     _colors = {'clear' : Qt.white, 'wall' : Qt.darkGray, 'start' : Qt.cyan, 'target' : Qt.yellow, 'checked' : Qt.green, 'frontier' : Qt.blue, 'route' : Qt.red}
@@ -108,7 +109,7 @@ class Tile(QGraphicsItem):
     def paint(self, painter, options, widget):
         painter.setBrush(self._color)
         painter.setPen(Qt.black)
-        painter.setFont(self.font)
+        painter.setFont(self.sub_font)
 
         if self.node.checked and self.type == 'clear':
             painter.setBrush(self._colors['checked'])
@@ -120,6 +121,9 @@ class Tile(QGraphicsItem):
         painter.setRenderHint(QPainter.Antialiasing)
         painter.drawRect(self.node.x*self.size, self.node.y*self.size, self.size, self.size)
         painter.drawText(self.node.x*self.size+2, self.node.y*self.size+14, str(self.subtext))
+        if self.node.checked:
+            painter.setFont(self.main_font)
+            painter.drawText(self.node.x*self.size+4, (self.node.y+0.5)*self.size+7, str(self.node.cost_so_far))
 
 
     def boundingRect(self):

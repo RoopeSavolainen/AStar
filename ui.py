@@ -123,7 +123,7 @@ class Tile(QGraphicsItem):
         painter.drawText(self.node.x*self.size+2, self.node.y*self.size+14, str(self.subtext))
         if self.node.checked:
             painter.setFont(self.main_font)
-            painter.drawText(self.node.x*self.size+4, (self.node.y+0.5)*self.size+7, str(self.node.cost_so_far))
+            painter.drawText(self.node.x*self.size+4, (self.node.y+0.5)*self.size+7, str(round(self.node.cost_so_far,2)))
 
 
     def boundingRect(self):

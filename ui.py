@@ -55,6 +55,8 @@ class AStarApplication(QWidget):
         for t in self.tiles:
             if self.grid.target is not None:
                 t.subtext = t.node.heuristic(self.grid.target)
+            else:
+                t.subtext = ''
             if t != caller and t.type != 'clear' and t.type != 'wall' and t.type == caller.type:
                 t.set_type('clear')
 
